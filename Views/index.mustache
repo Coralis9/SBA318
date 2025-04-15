@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Catalog</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>🎵 Music Catalog</h1>
+
+  <section>
+    <h2>Artists</h2>
+    <ul>
+      {{#artists}}
+        <li>ID {{id}} — {{name}}</li>
+      {{/artists}}
+    </ul>
+
+    <h3>Add New Artist</h3>
+    <form action="/api/artists" method="POST">
+      <input type="text" name="name" placeholder="Artist Name" required>
+      <button type="submit">Add Artist</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Albums</h2>
+    <ul>
+      {{#albums}}
+        <li>{{title}} (Artist ID: {{artistId}})</li>
+      {{/albums}}
+    </ul>
+  </section>
+
+  <section>
+    <h2>Songs</h2>
+    <ul>
+      {{#songs}}
+        <li>{{title}} (Album ID: {{albumId}})</li>
+      {{/songs}}
+    </ul>
+  </section>
+</body>
+</html>
