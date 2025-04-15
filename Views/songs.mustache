@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>All Songs</title></head>
+<body>
+  <h1> All Songs</h1>
+  <ul>
+    {{#songs}}
+      <li><strong>{{title}}</strong> by {{artist}} ({{year}}) — {{album}}</li>
+    {{/songs}}
+  </ul>
+  <a href="/songs/new">➕ Add New Song</a>
+</body>
+</html>

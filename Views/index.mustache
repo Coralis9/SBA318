@@ -2,43 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Music Catalog</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <h1>🎵 Music Catalog</h1>
 
-  <section>
-    <h2>Artists</h2>
-    <ul>
-      {{#artists}}
-        <li>ID {{id}} — {{name}}</li>
-      {{/artists}}
-    </ul>
+  <div class="music-player">
+    <h2>Now Playing: {{songTitle}}</h2>
+    <audio class="audio" controls>
+      <source src="{{songSrc}}" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
 
-    <h3>Add New Artist</h3>
-    <form action="/api/artists" method="POST">
-      <input type="text" name="name" placeholder="Artist Name" required>
-      <button type="submit">Add Artist</button>
-    </form>
-  </section>
+  
+  <form action="/api/songs" method="POST">
+    <input type="text" id="songTitle" name="title" placeholder="Song Title" required>
+    <input type="number" id="albumId" name="albumId" placeholder="Album ID" required>
+    <button type="submit">Add Song</button>
+  </form>
 
-  <section>
-    <h2>Albums</h2>
-    <ul>
-      {{#albums}}
-        <li>{{title}} (Artist ID: {{artistId}})</li>
-      {{/albums}}
-    </ul>
-  </section>
-
-  <section>
-    <h2>Songs</h2>
-    <ul>
-      {{#songs}}
-        <li>{{title}} (Album ID: {{albumId}})</li>
-      {{/songs}}
-    </ul>
-  </section>
 </body>
 </html>

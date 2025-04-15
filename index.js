@@ -1,57 +1,66 @@
-
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mustacheExpress = require('mustache-express');
 
-const app = express();
-const PORT = 3004; 
+// Import data from files
+const artists = require('./data/artist.js');
+const albums = require('./data/albums.js');
+const songs = require('./data/songs.js');
+const songsRouter = require('./routes/songs.js');
 
-// Middleware: Logger
+const app = express();
+const PORT = 3004;
+
+// Logger middleware
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });
 
-// Middleware: Timer
+// Timer middleware
 app.use((req, res, next) => {
   req.requestTime = Date.now();
   next();
 });
 
-// Middleware: Static & Body parser
+// Static files and body parsing
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json()); 
+app.use(express.json());
 
 // Mustache setup
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', path.join(__dirname, 'views'));
 
-// In-memory data
-let artists = [
-  { id: 1, name: 'Taylor Swift' },
-  { id: 2, name: 'Drake' }
-];
 
-let albums = [
-  { id: 1, title: '1989', artistId: 1 },
-  { id: 2, title: 'Scorpion', artistId: 2 }
-];
-
-let songs = [
-  { id: 1, title: 'Blank Space', albumId: 1 },
-  { id: 2, title: "God's Plan", albumId: 2 }
-];
-
-// Routes
 app.get('/', (req, res) => {
-  res.render('index', { artists, albums, songs });
+  const enrichedAlbums = albums.map(album => {
+    const artist = artists.find(a => a.id === album.artistId);
+    return { ...album, artistName: artist ? artist.name : 'Unknown' };
+  });
+
+  
+  const song = {
+    title: 'Blank Space',
+    audioSrc: '/audio/blank-space.mp3' 
+  };
+
+  res.render('index', {
+    artists,
+    albums: enrichedAlbums,
+    songs,
+    songTitle: song.title,
+    songSrc: song.audioSrc
+  });
 });
 
-// GET All
+// API Routes
+app.use('/api/songs', songsRouter);
+
 app.get('/api/artists', (req, res) => res.json(artists));
+
 app.get('/api/albums', (req, res) => {
   const { artistId } = req.query;
   if (artistId) {
@@ -59,9 +68,7 @@ app.get('/api/albums', (req, res) => {
   }
   res.json(albums);
 });
-app.get('/api/songs', (req, res) => res.json(songs));
 
-// POST Create
 app.post('/api/artists', (req, res) => {
   const { name } = req.body;
   const newArtist = { id: artists.length + 1, name };
@@ -69,7 +76,17 @@ app.post('/api/artists', (req, res) => {
   res.redirect('/');
 });
 
-// PATCH Update
+app.post('/api/songs', (req, res) => {
+  const { title, albumId } = req.body;
+  const newSong = {
+    id: songs.length + 1,
+    title,
+    albumId: parseInt(albumId),
+  };
+  songs.push(newSong);
+  res.redirect('/');
+});
+
 app.patch('/api/artists/:id', (req, res) => {
   const artist = artists.find(a => a.id == req.params.id);
   if (!artist) return res.status(404).json({ error: 'Not found' });
@@ -77,7 +94,6 @@ app.patch('/api/artists/:id', (req, res) => {
   res.json(artist);
 });
 
-// DELETE
 app.delete('/api/songs/:id', (req, res) => {
   const index = songs.findIndex(s => s.id == req.params.id);
   if (index === -1) return res.status(404).json({ error: 'Not found' });
@@ -85,14 +101,16 @@ app.delete('/api/songs/:id', (req, res) => {
   res.json(deleted);
 });
 
-// Error-handling middleware
+// Error-handling
 app.use((err, req, res, next) => {
   console.error('Error:', err.stack);
   res.status(500).send('Something broke!');
 });
 
-// Start
-app.listen(PORT, () => console.log(`Server at http://localhost:${PORT}`));
+// Start the server
+app.listen(PORT, () => {
+  console.log(`🎵 Server is running at http://localhost:${PORT}`);
+});
 
 
 
