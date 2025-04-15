@@ -1,6 +1,6 @@
 # 🎶 Music Catalog App
 
-A simple full-stack Node.js + Express application for managing artists, albums, and songs.
+A simple full-stack Node.js + Express application 
 
 Features
 
@@ -27,35 +27,6 @@ Routes Overview
 Views
 
 - `GET /` — main dashboard with form and lists
-
-Setup
-
-```bash
-npm install
-node index.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <!-- Create a server with endpoints : 
