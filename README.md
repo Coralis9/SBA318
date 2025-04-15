@@ -1,6 +1,6 @@
 # 🎶 Music Catalog App
 
-A simple full-stack Node.js + Express application 
+A simple full-stack Node.js & Express application 
 
 Features
 
@@ -9,7 +9,7 @@ Features
 - Query filtering for albums by artist
 - Custom and error-handling middleware
 - Form to add new artists
-- Views rendered using EJS
+- Views rendered using mustache
 - Styled with simple CSS
 - No API keys required
 
@@ -27,7 +27,6 @@ Routes Overview
 Views
 
 - `GET /` — main dashboard with form and lists
-
 
 <!-- Create a server with endpoints : 
 
