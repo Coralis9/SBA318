@@ -96,9 +96,6 @@ app.listen(PORT, () => console.log(`Server at http://localhost:${PORT}`));
 
 
 
-
-
-
 // const express = require('express');
 // const cors = require('cors');
 // const bodyParser = require('body-parser');

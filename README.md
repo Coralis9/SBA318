@@ -1,4 +1,4 @@
-# 🎶 Music Catalog App
+ Music Catalog App
 
 A simple full-stack Node.js & Express application 
 
